@@ -19,12 +19,43 @@ pipeline {
                       cd ..
                 """)
             }
+
+            
         }
         
-        stage('Powershell script stage') {
+        stage('Start test app') {
             steps {
-                powershell 'Write-Output "Hello power shell"'  
+                powershell(script: """
+                      docker-compose up -d
+                      ./scripts/test_container.ps1
+                """) 
+            }
+
+            post {
+                success {
+                    echo "App started successfully "
+                }
+
+                failure {
+                    echo "App failed to start"
+                }
             }
         }
+
+        stage('run tests') {
+            steps {
+                powershell(script: """
+                    pytest ./tests/test_sample.py
+                    """)
+            }
+        }
+
+        stage('Stop test app') {
+         steps {
+            pwsh(script: """
+               docker-compose down
+            """)
+         }
+      }
     }
 }
