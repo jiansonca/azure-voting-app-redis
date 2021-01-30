@@ -23,7 +23,7 @@ pipeline {
         
         stage('Powershell script stage') {
             steps {
-                powershell 'Write-Output "Hello power shell"'
+                powershell 'Write-Output "Hello power shell"'  
             }
         }
     }
