@@ -52,7 +52,7 @@ pipeline {
 
         stage('Stop test app') {
          steps {
-            pwsh(script: """
+            powershell(script: """
                docker-compose down
             """)
          }
